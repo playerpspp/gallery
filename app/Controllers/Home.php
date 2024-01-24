@@ -111,7 +111,7 @@ class Home extends BaseController
         );
         $model->simpan('log', $log);
 
-         return redirect()->to(base_url('/home/dashboard'));
+         return redirect()->to(base_url('/home'));
         
      
     }
@@ -143,6 +143,59 @@ class Home extends BaseController
         $where=array('album.user_id'=> session()->get('id_user'));
         $albums=$model->getWhere('album',$where);
         return $this->response->setJSON(['albums' => $albums]);
+    }
+
+    public function check_like($id)
+    {
+       
+
+        $model = new M_model;
+        $where=array(
+            'user_id'=> session()->get('id_user'),
+            'image_id'=> $id,
+    );
+        $like=$model->getRowArray('likes',$where);
+       $response = array(
+                        'status' => $like['status'],
+                    );
+
+echo json_encode(array('response' => $response));
+    }
+
+    public function like($id)
+    {
+       
+
+        $model = new M_model;
+        $where=array(
+            'user_id'=> session()->get('id_user'),
+            'image_id'=> $id,
+    );
+        $like=$model->getRowArray('likes',$where);
+
+        if(empty($like)){
+       $data= array(
+       'user_id'=> session()->get('id_user'),
+            'image_id'=> $id,
+            'status'=>"Y"
+        );
+   $model->simpan('likes',$data);
+}elseif(!empty($like) && $like->status == "Y"){
+    $data= array(
+            'status'=>"N"
+        );
+   $model->edit('likes',$data,$where);
+}elseif(!empty($like) && $like->status == "N"){
+    $data= array(
+            'status'=>"Y"
+        );
+   $model->edit('likes',$data,$where);
+}
+$response[] = array(
+                        'status' => $data['status'],
+                    );
+
+echo json_encode(array('response' => $response));
     }
 
     public function add_gallery()

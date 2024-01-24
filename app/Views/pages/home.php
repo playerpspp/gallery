@@ -129,32 +129,35 @@ if (!empty(session()->get('foto')) && file_exists(PUBLIC_PATH.$imagePath)) {
             </div>
         </div>
 
-                <div class="modal fade" id="commentModal" tabindex="-1" aria-labelledby="commentModalLabel" aria-hidden="true">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="commentModalLabel">Comments</h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <div class="modal-body">
-                                <!-- Comments will be loaded here dynamically -->
-                                <div id="comments-container">
-                                    <!-- Comments will be dynamically loaded here -->
-                                </div>
+                <!-- Your modal structure -->
+              <div class="modal fade" id="commentModal" tabindex="-1" aria-labelledby="commentModalLabel" aria-hidden="true">
+                  <!-- Modal content goes here -->
+                  <div class="modal-dialog">
+                      <div class="modal-content">
+                          <div class="modal-header">
+                              <h5 class="modal-title" id="commentModalLabel">Comments</h5>
+                              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                  <span aria-hidden="true">&times;</span>
+                              </button>
+                          </div>
+                          <div class="modal-body">
+                              <!-- Comments will be loaded here dynamically -->
+                              <div id="comments-container">
+                                  <!-- Comments will be dynamically loaded here -->
+                              </div>
 
-                                <!-- Input field for adding comments -->
-                                <div class="form-group">
-                                    <label for="commentInput">Add Comment:</label>
-                                    <input type="text" class="form-control" id="commentInput" placeholder="Type your comment here">
-                                </div>
+                              <!-- Input field for adding comments -->
+                              <div class="form-group">
+                                  <label for="commentInput">Add Comment:</label>
+                                  <input type="text" class="form-control" id="commentInput" placeholder="Type your comment here">
+                              </div>
 
-                                <button type="button" class="btn btn-primary" id="submitComment">Submit Comment</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                              <button type="button" class="btn btn-primary" id="submitComment">Submit Comment</button>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+
 
     <!-- Your scripts go here, including the Bootstrap, jQuery, and your custom JavaScript -->
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
@@ -236,7 +239,13 @@ if (!empty(session()->get('foto')) && file_exists(PUBLIC_PATH.$imagePath)) {
           // If liked, add the 'liked' class to the like button
           $('.like-button[data-id="' + postId + '"]').addClass('liked');
         }
+
+        if (response.status === 'N' || response.status === "") {
+          // If liked, add the 'liked' class to the like button
+          $('.like-button[data-id="' + postId + '"]').addClass('liked');
+        }
         // You can handle 'N' status if needed
+        console.error(response['status']);
       },
       error: function() {
         console.error('Error checking like status');
@@ -249,7 +258,7 @@ if (!empty(session()->get('foto')) && file_exists(PUBLIC_PATH.$imagePath)) {
     var postId = $(this).closest('.item').data('id');
     checkLikeStatus(postId);
   });
-});
+
   // Like Button Click
   $('.like-button').on('click', function(e) {
     e.preventDefault();
@@ -262,6 +271,12 @@ if (!empty(session()->get('foto')) && file_exists(PUBLIC_PATH.$imagePath)) {
       method: 'POST',
       success: function(response) {
         // Update the like count on the specific item
+        if (response.status === 'Y') {
+          // If liked, add the 'liked' class to the like button
+          $('.like-button[data-id="' + postId + '"]').addClass('liked');
+        }else if(response.status === 'N'){
+          $('.like-button[data-id="' + postId + '"]').removeClass('liked');
+        }
         var newLikeCount = parseInt(response.likeCount);
         likeButton.find('.like-count').text(newLikeCount);
       },
@@ -302,71 +317,69 @@ if (!empty(session()->get('foto')) && file_exists(PUBLIC_PATH.$imagePath)) {
     var commentButton = $(this);
     var postId = commentButton.closest('.item').data('id');
 
-    // Open a pop-up or modal for comments
-    // Example using Bootstrap modal
+    // Set the postId to a div within the modal
+    $('#commentModal').data('postId', postId);
+
+    // Open the modal
     $('#commentModal').modal('show');
 
     // Populate the modal with comments for the specific item using AJAX
     $.ajax({
-      url: '/home/comments/' + postId,
-      method: 'GET',
-      success: function(response) {
-        // Update the modal content with actual comments
-        // You'll need to customize this based on your response data
+        url: '/home/comments/' + postId,
+        method: 'GET',
+        success: function(response) {
+            // Update the modal content with actual comments
+            // You'll need to customize this based on your response data
+            var commentsHtml = '';
 
-        var commentsHtml = '';
+            response.comments.forEach(function(comment) {
+                commentsHtml += `
+                    <div class="comment">
+                        <div class="comment-line">
+                            <span class="comment-author">${comment.nama_user}</span>
+                        </div>
+                        <div class="comment-line">
+                            <span class="comment-text">${comment.comment}</span>
+                        </div>
+                        <div class="comment-line">
+                            <span class="comment-datetime">${comment.time_comment}</span>
+                        </div>
+                        <hr class="comment-divider">
+                    </div>
+                `;
+            });
 
-        // Iterate through the comments received from the server
-        response.comments.forEach(function(comment) {
-          // Append HTML for each comment
-          commentsHtml += `
-            <div class="comment">
-              <div class="comment-line">
-                <span class="comment-author">${comment.nama_user}</span>
-              </div>
-              <div class="comment-line">
-                <span class="comment-text">${comment.comment}</span>
-              </div>
-              <div class="comment-line">
-                <span class="comment-datetime">${comment.time_comment}</span>
-              </div>
-              <hr class="comment-divider">
-            </div>
-          `;
-        });
+            $('#comments-container').html(commentsHtml);
+        },
+        error: function() {
+            console.error('Error fetching comments');
+        }
+    });
+});
 
-        // Set the generated HTML to the comments container
-        $('#comments-container').html(commentsHtml);
-      },
-      error: function() {
-        console.error('Error fetching comments');
-      }
+$('#submitComment').on('click', function() {
+    var postId = $('#commentModal').data('postId');
+    var commentText = $('#commentInput').val();
+
+    // Send AJAX request to handle adding a comment for a specific item
+    $.ajax({
+        url: '/home/add-comment/' + postId,
+        method: 'POST',
+        data: { comment: commentText },
+        success: function(response) {
+            // Handle success (e.g., update the comments dynamically)
+            // You'll need to customize this based on your response data
+            $('#comments-container').append('<div>' + commentText + '</div>');
+            $('#commentInput').val(''); // Clear the input field
+        },
+        error: function() {
+            console.error('Error adding comment');
+        }
     });
 });
 
 
-$('#submitComment').on('click', function() {
-                var postId = likeButton.closest('.item').data('id');
-                var commentText = $('#commentInput').val();
-
-                // Send AJAX request to handle adding a comment for a specific item
-                $.ajax({
-                    url: '/home/add-comment/' + postId,
-                    method: 'POST',
-                    data: { comment: commentText },
-                    success: function(response) {
-                        // Handle success (e.g., update the comments dynamically)
-                        // You'll need to customize this based on your response data
-                        $('#comments-container').append('<div>' + commentText + '</div>');
-                        $('#commentInput').val(''); // Clear the input field
-                    },
-                    error: function() {
-                        console.error('Error adding comment');
-                    }
-                });
-            });
-
-
+          });
 </script>
 
 

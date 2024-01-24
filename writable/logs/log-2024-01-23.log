@@ -1,0 +1,47 @@
+ERROR - 2024-01-23 18:51:58 --> Error connecting to the database: No connection could be made because the target machine actively refused it
+CRITICAL - 2024-01-23 18:51:58 --> Unable to connect to the database.
+Main connection [MySQLi]: No connection could be made because the target machine actively refused it
+#0 G:\My Drive\CI4\gallery\system\Database\BaseConnection.php(577): CodeIgniter\Database\BaseConnection->initialize()
+#1 G:\My Drive\CI4\gallery\system\Database\BaseBuilder.php(1588): CodeIgniter\Database\BaseConnection->query('SELECT *\nFROM `...', Array, false)
+#2 G:\My Drive\CI4\gallery\app\Models\M_model.php(241): CodeIgniter\Database\BaseBuilder->getWhere(Array)
+#3 G:\My Drive\CI4\gallery\app\Controllers\Home.php(94): App\Models\M_model->getRowArray('user', Array)
+#4 G:\My Drive\CI4\gallery\system\CodeIgniter.php(832): App\Controllers\Home->act_login()
+#5 G:\My Drive\CI4\gallery\system\CodeIgniter.php(419): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Home))
+#6 G:\My Drive\CI4\gallery\system\CodeIgniter.php(326): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#7 G:\My Drive\CI4\gallery\public\index.php(37): CodeIgniter\CodeIgniter->run()
+#8 G:\My Drive\CI4\gallery\system\Commands\Server\rewrite.php(43): require_once('G:\\My Drive\\CI4...')
+#9 {main}
+ERROR - 2024-01-23 18:52:03 --> Error connecting to the database: No connection could be made because the target machine actively refused it
+CRITICAL - 2024-01-23 18:52:03 --> Unable to connect to the database.
+Main connection [MySQLi]: No connection could be made because the target machine actively refused it
+#0 G:\My Drive\CI4\gallery\system\Database\BaseConnection.php(577): CodeIgniter\Database\BaseConnection->initialize()
+#1 G:\My Drive\CI4\gallery\system\Database\BaseBuilder.php(1588): CodeIgniter\Database\BaseConnection->query('SELECT *\nFROM `...', Array, false)
+#2 G:\My Drive\CI4\gallery\app\Models\M_model.php(241): CodeIgniter\Database\BaseBuilder->getWhere(Array)
+#3 G:\My Drive\CI4\gallery\app\Controllers\Home.php(94): App\Models\M_model->getRowArray('user', Array)
+#4 G:\My Drive\CI4\gallery\system\CodeIgniter.php(832): App\Controllers\Home->act_login()
+#5 G:\My Drive\CI4\gallery\system\CodeIgniter.php(419): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Home))
+#6 G:\My Drive\CI4\gallery\system\CodeIgniter.php(326): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#7 G:\My Drive\CI4\gallery\public\index.php(37): CodeIgniter\CodeIgniter->run()
+#8 G:\My Drive\CI4\gallery\system\Commands\Server\rewrite.php(43): require_once('G:\\My Drive\\CI4...')
+#9 {main}
+ERROR - 2024-01-23 18:53:10 --> Table 'gallery.log' doesn't exist
+CRITICAL - 2024-01-23 20:10:45 --> syntax error, unexpected '=>' (T_DOUBLE_ARROW), expecting ')'
+#0 H:\My Drive\CI4\gallery\system\Autoloader\Autoloader.php(241): CodeIgniter\Autoloader\Autoloader->includeFile('H:\\My Drive\\CI4...')
+#1 H:\My Drive\CI4\gallery\system\Autoloader\Autoloader.php(219): CodeIgniter\Autoloader\Autoloader->loadInNamespace('App\\Controllers...')
+#2 [internal function]: CodeIgniter\Autoloader\Autoloader->loadClass('App\\Controllers...')
+#3 [internal function]: spl_autoload_call('App\\Controllers...')
+#4 H:\My Drive\CI4\gallery\system\CodeIgniter.php(797): class_exists('\\App\\Controller...', true)
+#5 H:\My Drive\CI4\gallery\system\CodeIgniter.php(406): CodeIgniter\CodeIgniter->startController()
+#6 H:\My Drive\CI4\gallery\system\CodeIgniter.php(326): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#7 H:\My Drive\CI4\gallery\public\index.php(37): CodeIgniter\CodeIgniter->run()
+#8 H:\My Drive\CI4\gallery\system\Commands\Server\rewrite.php(43): require_once('H:\\My Drive\\CI4...')
+#9 {main}
+ERROR - 2024-01-23 20:15:38 --> Table 'gallery.log' doesn't exist
+CRITICAL - 2024-01-23 20:33:14 --> syntax error, unexpected '=>' (T_DOUBLE_ARROW)
+#0 H:\My Drive\CI4\gallery\system\Router\Router.php(175): CodeIgniter\Router\Router->autoRoute('home')
+#1 H:\My Drive\CI4\gallery\system\CodeIgniter.php(726): CodeIgniter\Router\Router->handle('home')
+#2 H:\My Drive\CI4\gallery\system\CodeIgniter.php(368): CodeIgniter\CodeIgniter->tryToRouteIt(Object(CodeIgniter\Router\RouteCollection))
+#3 H:\My Drive\CI4\gallery\system\CodeIgniter.php(326): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#4 H:\My Drive\CI4\gallery\public\index.php(37): CodeIgniter\CodeIgniter->run()
+#5 H:\My Drive\CI4\gallery\system\Commands\Server\rewrite.php(43): require_once('H:\\My Drive\\CI4...')
+#6 {main}
